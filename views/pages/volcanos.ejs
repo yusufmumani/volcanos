@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../partials/head'); %>
+        <style>
+            .search-bar {
+                padding: 10px 0px 0px 0.75em;
+                margin: 0;
+                background-color: #f8f9fa;
+            }
+            .search-box {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+            }
+            #info {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .search-input {
+                width: 50%;
+            }
+            .clear-btn {
+                margin-left: 10px;
+            }
+        </style>
+        <script>
+            function onVolcanoClicked(id) {
+                window.location.href = '/volcano/' + id;
+            }
+
+            function renderTableBody(volcanos) {
+                let tmp = [];
+                for (const volcano of volcanos) {
+                    if (volcano.SearchResults)
+                        for (let i = volcano.SearchResults.length - 1; i >= 0; i--)
+                            volcano.Name = volcano.Name.substring(0, (volcano.SearchResults[i][0][0])) + '<b>' + volcano.SearchResults[i][1][0] + '</b>' + volcano.Name.substring(volcano.SearchResults[i][0][1] + 1, volcano.Name.length);
+                    tmp.push(`
+                    <tr onclick="onVolcanoClicked(${volcano.ID})">
+                        <td>${volcano.Name}</td>
+                        <td>${volcano.Active}</td>
+                        <td class="d-print-none">
+                            <a class="btn btn-sm btn-danger" href="/delete/${volcano.ID}">Remove</a>
+                        </td>
+                    </tr>`);
+                }
+                if (!tmp.length) {
+                    document.getElementById("info").innerText = "No results found. Please try a different search term.";
+                } else {
+                    document.getElementById("info").innerText = "";
+                }
+                return tmp.join("");
+            }
+
+            window.onload = (event) => {
+                let model = <%- JSON.stringify(model) %>
+
+                if (!model.length) {
+                    document.getElementById("info").innerText = "There are no Volcanos stored in the database.";
+                }
+
+                document.getElementById("clearSearch").addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.target.blur();
+                    document.getElementById("search").value = "";
+
+                    const xhr = new XMLHttpRequest();
+
+                    xhr.open(
+                    	'POST',
+                    	'/api/search',
+                    	true
+                    );
+                    xhr.setRequestHeader('Content-type', 'application/json');
+                    xhr.onload = function () {
+                        document.getElementById("tableBody").innerHTML = renderTableBody(JSON.parse(xhr.response));
+                    };
+                    xhr.send(JSON.stringify({"searchQuery":""}));
+                });
+                document.getElementById("search").addEventListener('input', function(event) {
+                    const xhr = new XMLHttpRequest();
+
+                    xhr.open(
+                    	'POST',
+                    	'/api/search',
+                    	true
+                    );
+                    xhr.setRequestHeader('Content-type', 'application/json');
+                    xhr.onload = function () {
+                        document.getElementById("tableBody").innerHTML = renderTableBody(JSON.parse(xhr.response));
+                    };
+                    xhr.send(JSON.stringify({"searchQuery": event.target.value}));
+                });
+            }
+        </script>
+    </head>
+    <body class="container">
+        <header>
+            <%- include('../partials/header'); %>
+        </header>
+
+        <main>
+            <div class="search-bar">
+                <div><b>Search</b></div>
+                <div class="search-box">
+                    <input class="search-input form-control" id="search" value="" />
+                    <a class="clear-btn btn btn-sm btn-danger" id="clearSearch" href="">Clear Search</a>
+                </div>
+            </div>
+            <div class="table-responsive-sm">
+                <table class="table table-hover table-borderless">
+                    <thead class="jumbotron">
+                        <tr>
+                            <th>Name</th>
+                            <th>Active</th>
+                            <th class="d-print-none">
+                                <a class="btn btn-sm btn-success" href="/create">Add</a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <% for (const volcano of model) { %>
+                            <tr onclick="onVolcanoClicked(<%= volcano.ID %>)">
+                                <td><%= volcano.Name %></td>
+                                <td><%= volcano.Active %></td>
+                                <td class="d-print-none">
+                                    <a class="btn btn-sm btn-danger" href="/delete/<%= volcano.ID %>">Remove</a>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <p id="info"></p>
+            </div>
+        </main>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+    </body>
+</html>

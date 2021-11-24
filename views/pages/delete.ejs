@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../partials/head'); %>
+        <script>
+            function formSubmitted(event) {
+                event.preventDefault();
+
+                let model = <%- JSON.stringify(model) %>
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.open(
+					'DELETE',
+					'/api/volcano/' + model.ID,
+					true
+                );
+                xhr.setRequestHeader('Content-type', 'application/json');
+                xhr.onload = function () {
+					console.log(xhr.response);
+                    window.location.href = '/volcanos';
+                };
+                xhr.send(JSON.stringify({}));
+            }
+
+            window.onload = (event) => {
+                const form = document.getElementById('form');
+                form.addEventListener('submit', formSubmitted);
+            }
+        </script>
+    </head>
+    <body class="container">
+        <header>
+            <%- include('../partials/header'); %>
+        </header>
+
+        <main>
+            <h1>Remove volcano <%= model.Name %> ?</h1>
+
+            <form id="form">
+              <div class="form-horizontal">
+
+                <%- include("display") -%>
+
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2"></label>
+                  <div class="col-sm-10">
+                    <input type="submit" value="Remove" class="btn btn-default btn-danger" />
+                    <a class="btn btn-outline-dark cancel" href="/livres">Cancel</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+        </main>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+    </body>
+</html>

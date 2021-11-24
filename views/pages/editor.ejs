@@ -1,0 +1,27 @@
+<div class="form-group row">
+  <label class="col-form-label col-sm-2" for="Name">Name</label>
+  <div class="col-sm-8">
+    <input id="Name" autofocus class="form-control" name="Name" required value="<%= model.Name %>" />
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-form-label col-sm-2" for="Location">Location</label>
+  <div class="col-sm-7">
+    <input id="Location" class="form-control" name="Location" required value="<%= model.Location %>" />
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-form-label col-sm-2" for="History">History</label>
+  <div class="col-sm-10">
+    <textarea id="History" class="form-control" cols="20" name="History" required maxlength="32000" rows="7"><%= model.History %></textarea>
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-form-label col-sm-2" for="Active">Active</label>
+  <div class="col-sm-7">
+    <input id="Active" class="form-control" name="Active" required value="<%= model.Active %>" />
+  </div>
+</div>

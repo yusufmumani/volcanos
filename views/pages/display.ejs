@@ -1,0 +1,27 @@
+<div class="form-group row">
+  <label class="col-form-label col-sm-2" for="Name">Name</label>
+  <div class="col-sm-8">
+    <input readonly class="form-control" id="Name" value="<%= model.Name %>" />
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-form-label col-sm-2" for="Location">Location</label>
+  <div class="col-sm-7">
+    <input readonly class="form-control" id="Location" value="<%= model.Location %>" />
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-form-label col-sm-2" for="History">History</label>
+  <div class="col-sm-10">
+    <textarea readonly class="form-control" cols="20" id="History" maxlength="32000" rows="7"><%= model.History %></textarea>
+  </div>
+</div>
+
+<div class="form-group row">
+  <label class="col-form-label col-sm-2" for="Active">Active</label>
+  <div class="col-sm-7">
+    <input readonly class="form-control" id="Active" value="<%= model.Active %>" />
+  </div>
+</div>

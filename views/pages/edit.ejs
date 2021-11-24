@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../partials/head'); %>
+        <script>
+            function formSubmitted(event) {
+                event.preventDefault();
+                const name = document.getElementById('Name').value;
+                const location = document.getElementById('Location').value;
+                const history = document.getElementById('History').value;
+                const active = document.getElementById('Active').value;
+
+                let model = <%- JSON.stringify(model) %>
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.open(
+					'PUT',
+					'/api/volcano/' + model.ID,
+					true
+                );
+                xhr.setRequestHeader('Content-type', 'application/json');
+                xhr.onload = function () {
+					console.log(xhr.response);
+                    window.location.href = '/volcanos';
+                };
+                xhr.send(JSON.stringify({"Name":name, "Location":location, "History": history, "Active":active}));
+            }
+
+            window.onload = (event) => {
+                const form = document.getElementById('form');
+                form.addEventListener('submit', formSubmitted);
+            }
+        </script>
+    </head>
+    <body class="container">
+        <header>
+            <%- include('../partials/header'); %>
+        </header>
+
+        <main>
+            <h1>Update a volcano</h1>
+
+            <form id="form">
+
+              <div class="form-horizontal">
+
+                <%- include("editor") -%>
+
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-2"></label>
+                  <div class="col-sm-10">
+                    <input type="submit" value="Edit" class="btn btn-default btn-warning" />
+                    <a class="btn btn-outline-dark cancel" href="/volcanos">Cancel</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+        </main>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+    </body>
+</html>

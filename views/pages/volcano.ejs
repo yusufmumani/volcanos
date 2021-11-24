@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('../partials/head'); %>
+        <style>
+            .edit-btn {
+                min-width: 80px;
+            }
+        </style>
+    </head>
+    <body class="container">
+        <header>
+            <%- include('../partials/header'); %>
+        </header>
+
+        <main>
+            <div class="jumbotron">
+                <h1><%= model.Name %></h1>
+                <h3>Location</h3>
+                <p><%= model.Location %></p>
+                <h3>History</h3>
+                <p><%= model.History %></p>
+                <h3>Active</h3>
+                <p><%= model.Active %></p>
+
+                <div class="text-center">
+                    <a class="edit-btn btn btn-sm btn-warning" href="/edit/<%= model.ID %>">Edit</a>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <%- include('../partials/footer'); %>
+        </footer>
+    </body>
+</html>
